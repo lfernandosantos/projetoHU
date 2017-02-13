@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Hotel Urbano</string>
+    <string name="title_activity_hoteis">HoteisActivity</string>
+    <string name="title_activity_busca">BuscaActivity</string>
+    <string name="title_activity_hotel_detail">HotelDetailActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+</resources>
