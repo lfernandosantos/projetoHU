@@ -2,34 +2,27 @@ package br.com.lf.hotelurbano;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import br.com.lf.hotelurbano.intefaces.RecyclerViewOnClickListenerHack;
 import br.com.lf.hotelurbano.json.CatalogoDisponibilidades;
-import br.com.lf.hotelurbano.json.CatalogoHoteis;
-import br.com.lf.hotelurbano.json.IHotelService;
+import br.com.lf.hotelurbano.intefaces.IHotelService;
 import br.com.lf.hotelurbano.models.Disponibilidade;
 import br.com.lf.hotelurbano.models.Hotel;
 import br.com.lf.hotelurbano.models.ListaHoteisAdapter;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,9 +87,13 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
 
     private void buscaJSON(final Hotel hotel) {
 
+        OkHttpClient okHttpClient = getRequestHeader();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IHotelService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
 
         IHotelService jsonPostos = retrofit.create(IHotelService.class);
 
@@ -106,6 +103,8 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
             public void onResponse(Call<CatalogoDisponibilidades> call, Response<CatalogoDisponibilidades> response) {
                 if (!response.isSuccessful()){
                     Log.i("TAG", "ERRO: " + response.code());
+
+
                 }else{
                     Log.i("TAG", "OK: " + response.body());
 
@@ -137,5 +136,14 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
         Hotel h = hoteis.get(position);
         Log.i("Hotel", h.codigo);
         buscaJSON(h);
+    }
+    private OkHttpClient getRequestHeader() {
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        return okHttpClient;
     }
 }

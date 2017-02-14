@@ -1,18 +1,15 @@
 package br.com.lf.hotelurbano;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -28,10 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import br.com.lf.hotelurbano.json.CatalogoHoteis;
-import br.com.lf.hotelurbano.json.IHotelService;
+import br.com.lf.hotelurbano.intefaces.IHotelService;
 import br.com.lf.hotelurbano.models.Hotel;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -159,19 +157,33 @@ public class HoteisActivity extends AppCompatActivity implements View.OnClickLis
                 .hideSoftInputFromWindow(editTextCidadeHotel.getWindowToken(), 0);
     }
 
-    private void buscaJSON(final String cidade) {
+    private void buscaJSON(final String nome) {
+
+        OkHttpClient okHttpClient = getRequestHeader();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(IHotelService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
 
         IHotelService jsonPostos = retrofit.create(IHotelService.class);
 
-        Call<CatalogoHoteis> listaRequest = jsonPostos.listaHotel(cidade);
+        Call<CatalogoHoteis> listaRequest = jsonPostos.listaHotel(nome);
         listaRequest.enqueue(new Callback<CatalogoHoteis>() {
             @Override
             public void onResponse(Call<CatalogoHoteis> call, Response<CatalogoHoteis> response) {
                 if (!response.isSuccessful()){
                     Log.i("TAG", "ERRO: " + response.code());
+                    progressDialog.dismiss();
+
+                    new AlertDialog.Builder(HoteisActivity.this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Erro de Comunicação")
+                            .setMessage("Erro ao realizar a busca. Verifique sua conexão e tente novamente!")
+                            .setNeutralButton("OK", null)
+                            .show();
+
                 }else{
                     Log.i("TAG", "OK: " + response.body());
 
@@ -182,7 +194,7 @@ public class HoteisActivity extends AppCompatActivity implements View.OnClickLis
                     progressDialog.dismiss();
                     if (hoteis.size()>1){
                         Intent goBusca =  new Intent(HoteisActivity.this, BuscaActivity.class);
-                        goBusca.putExtra("busca", cidade);
+                        goBusca.putExtra("busca", nome);
                         goBusca.putExtra("hoteis", (Serializable) hoteis);
                         goBusca.putExtra("periodo", editTextDataEntrada.getText().toString().trim()
                         +" - " + editTextDataSaida.getText().toString().trim());
@@ -194,9 +206,24 @@ public class HoteisActivity extends AppCompatActivity implements View.OnClickLis
             public void onFailure(Call<CatalogoHoteis> call, Throwable t) {
                 progressDialog.dismiss();
                 Log.i("TAG", "ERRO: " + t);
+                new AlertDialog.Builder(HoteisActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Erro de Comunicação")
+                        .setMessage("Erro ao realizar a busca. Verifique sua conexão e tente novamente!")
+                        .setNeutralButton("OK", null)
+                        .show();
             }
         });
 
     }
 
+    private OkHttpClient getRequestHeader() {
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        return okHttpClient;
+    }
 }

@@ -29,7 +29,7 @@
             <TextView
                 android:textStyle="bold"
                 android:textSize="22sp"
-                android:text="HOTEIS"
+                android:text="Hotéis"
                 android:textColor="#FFFF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

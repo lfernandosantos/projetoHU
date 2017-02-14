@@ -55,10 +55,8 @@ public class HotelDetailActivity extends AppCompatActivity implements View.OnCli
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, disponibilidade);
 
-        listView.setAdapter(adapter);
-
+        listView.setAdapter(adapter); 
         imgPeriodo.setOnClickListener(this);
-
 
     }
     private void updateDate(){
