@@ -1,5 +1,6 @@
 package br.com.lf.hotelurbano;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
     private RecyclerView recyclerViewHoteis;
     ListaHoteisAdapter hoteisAdapter;
     List<Hotel> hoteis;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // listViewBusca = (ListView) findViewById(R.id.listaHoteis);
+
+        progressDialog = new ProgressDialog(this);
         textViewDadosBusca = (TextView) findViewById(R.id.textViewPeriodo);
         imageViewPeriodo = (ImageView) findViewById(R.id.imgPeriodo);
         recyclerViewHoteis = (RecyclerView) findViewById(R.id.listaHoteis);
@@ -71,18 +74,6 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
         }
         textViewDadosBusca.setText(periodo);
 
-       // ArrayAdapter<List<Hotel>> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, hoteis);
-
-        //listViewBusca.setAdapter(adapter);
-
-//        listViewBusca.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Hotel h = (Hotel) adapterView.getItemAtPosition(i);
-//                Log.i("Hotel", h.codigo);
-//                buscaJSON(h);
-//            }
-//        });
     }
 
     private void buscaJSON(final Hotel hotel) {
@@ -119,10 +110,13 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
                     startActivity(goHotel);
 
                 }
+
+                progressDialog.dismiss();
             }
             @Override
             public void onFailure(Call<CatalogoDisponibilidades> call, Throwable t) {
 
+                progressDialog.dismiss();
                 Log.i("TAG", "ERRO: " + t);
             }
         });
@@ -132,9 +126,11 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
 
     @Override
     public void onClickListener(View view, int position) {
-
         Hotel h = hoteis.get(position);
         Log.i("Hotel", h.codigo);
+
+        progressDialog.setMessage("Aguarde...");
+        progressDialog.show();
         buscaJSON(h);
     }
     private OkHttpClient getRequestHeader() {

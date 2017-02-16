@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:text="Selecionar Datas"
+            android:text="Data de Entrada"
             android:textStyle="bold"
             android:textColor="#ffffff"
             android:backgroundTint="@color/colorAccent"
@@ -42,12 +42,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ListView
-            android:id="@+id/listaDatas"
+        <Button
+            android:text="Data de Saída"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:backgroundTint="@color/colorAccent"
+            android:id="@+id/btn_data_saida"
             android:layout_below="@+id/btn_selecionar_datas"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content" />
 
+        <EditText
+            android:layout_toRightOf="@+id/btn_selecionar_datas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:layout_alignBottom="@+id/btn_selecionar_datas"
+            android:id="@+id/edit_data_entrada" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:layout_alignBottom="@+id/btn_data_saida"
+            android:layout_toRightOf="@+id/btn_data_saida"
+            android:id="@+id/edit_data_saida" />
 
 
 </RelativeLayout>

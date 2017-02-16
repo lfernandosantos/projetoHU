@@ -200,6 +200,14 @@ public class HoteisActivity extends AppCompatActivity implements View.OnClickLis
                         +" - " + editTextDataSaida.getText().toString().trim());
                         startActivity(goBusca);
                     }
+                    else {
+                        new AlertDialog.Builder(HoteisActivity.this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle("Não Encontrado")
+                                .setMessage("Nenhum hotel ou cidade foi encontrada. Verifique os dados informados e tente novamente!")
+                                .setNeutralButton("OK", null)
+                                .show();
+                    }
                 }
             }
             @Override
