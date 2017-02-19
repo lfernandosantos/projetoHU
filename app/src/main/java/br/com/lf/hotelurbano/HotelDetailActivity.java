@@ -3,20 +3,17 @@ package br.com.lf.hotelurbano;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -35,17 +32,19 @@ public class HotelDetailActivity extends AppCompatActivity implements DatePicker
     private List<Disponibilidade> disponibilidade;
     private TextView nome;
     private TextView cidade;
-    private Button imgPeriodo;
-    private Button btnSelecDateEntrada;
-    private Button btnSelecDateSaida;
-    private EditText edtDataEntrada;
-    private EditText edtDataSaida;
-    Calendar dateTime = Calendar.getInstance();
-    Boolean dateEntrada = false;
+    private ImageView imgCalendarEntrada;
+    private ImageView imgCalendarSaida;
+    private TextView textVDataEntrada;
+    private TextView textViewEntrada;
+    private TextView textVDataSaida;
+    private TextView textViewSaida;
+    private ImageView imgHotel;
+    private Button btnReservar;
     private int year, month, day;
     SimpleDateFormat format = new SimpleDateFormat("d/MM/yyyy");
     private Boolean dataSaída = true;
     Calendar preDateEntrada;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +53,43 @@ public class HotelDetailActivity extends AppCompatActivity implements DatePicker
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //finds
         nome = (TextView) findViewById(R.id.txtnomes);
         cidade = (TextView) findViewById(R.id.txtcidade);
-        edtDataSaida = (EditText) findViewById(R.id.edit_data_saida);
-        edtDataEntrada = (EditText) findViewById(R.id.edit_data_entrada);
-        imgPeriodo = (Button) findViewById(R.id.btn_selecionar_datas);
-        btnSelecDateSaida = (Button) findViewById(R.id.btn_data_saida);
+        imgCalendarEntrada = (ImageView) findViewById(R.id.img_calendar_entrada);
+        textViewEntrada = (TextView) findViewById(R.id.textViewEntrada);
+        btnReservar = (Button) findViewById(R.id.btn_reservar);
 
-        imgPeriodo = (Button) findViewById(R.id.btn_selecionar_datas);
+        imgCalendarSaida = (ImageView) findViewById(R.id.img_calendar_saida);
+        textViewSaida = (TextView) findViewById(R.id.textViewSaida);
+
+        textVDataSaida = (TextView) findViewById(R.id.edit_data_saida);
+        textVDataEntrada = (TextView) findViewById(R.id.edit_data_entrada);
+        imgHotel = (ImageView) findViewById(R.id.img_hotel);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         disponibilidade = (List<Disponibilidade>) getIntent().getSerializableExtra("disp");
         hotel = (Hotel) getIntent().getSerializableExtra("hotel");
 
-        setTitle(hotel.nome);
+        mCollapsingToolbarLayout.setTitle(hotel.nome);
+
         toolbar.setSubtitle(hotel.cidade);
         nome.setText(hotel.nome);
         cidade.setText(hotel.cidade);
+        Glide.with(this)
+                .load("https://s3.amazonaws.com/ah.sized.images/desktop/luxury-hotels-rio-de-janeiro-belmond-copacabana-palace-slide-8_lg.jpg")
+                .into(imgHotel);
 
-        edtDataEntrada.setOnClickListener(this);
+        imgCalendarEntrada.setOnClickListener(this);
+        textVDataEntrada.setOnClickListener(this);
+        textViewEntrada.setOnClickListener(this);
 
-        btnSelecDateSaida.setOnClickListener(this);
-        imgPeriodo.setOnClickListener(this);
+        imgCalendarSaida.setOnClickListener(this);
+        textVDataSaida.setOnClickListener(this);
+        textViewSaida.setOnClickListener(this);
+        btnReservar.setOnClickListener(this);
+
+
 
     }
     private void updateDate(List<Disponibilidade> disp){
@@ -204,26 +219,30 @@ public class HotelDetailActivity extends AppCompatActivity implements DatePicker
         Date date = new Date(year, monthOfYear, dayOfMonth);
         if (!dataSaída){
 
-            edtDataSaida.getText().clear();
-            edtDataEntrada.setText(simpleDateFormat.format(date));
+            textVDataSaida.clearComposingText();
+            textVDataEntrada.setText(simpleDateFormat.format(date));
             preDateEntrada = Calendar.getInstance();
             preDateEntrada.set(year, monthOfYear, dayOfMonth);
 
         }
         else {
-            edtDataSaida.setText(simpleDateFormat.format(date));
+            textVDataSaida.setText(simpleDateFormat.format(date));
         }
     }
 
     @Override
     public void onClick(View view) {
-        if (view == imgPeriodo){
+        if (view == imgCalendarEntrada || view == textVDataEntrada || view == textViewEntrada){
             dataSaída = false;
             updateDate(disponibilidade);
         }
-        if (view == btnSelecDateSaida){
+        if (view == imgCalendarSaida || view == textVDataSaida || view == textViewSaida){
             dataSaída = true;
             updateDate(disponibilidade);
+        }
+        if (view == btnReservar){
+            Snackbar.make(btnReservar, "Reverva realizada!", Snackbar.LENGTH_LONG).setActionTextColor(getResources().getColor(R.color.colorAccent))
+                    .show();
         }
     }
 }

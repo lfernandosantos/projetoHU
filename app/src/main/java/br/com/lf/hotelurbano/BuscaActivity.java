@@ -47,7 +47,6 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         progressDialog = new ProgressDialog(this);
         textViewDadosBusca = (TextView) findViewById(R.id.textViewPeriodo);
         imageViewPeriodo = (ImageView) findViewById(R.id.imgPeriodo);
@@ -66,7 +65,6 @@ public class BuscaActivity extends AppCompatActivity implements RecyclerViewOnCl
         hoteisAdapter = new ListaHoteisAdapter(this, hoteis);
         hoteisAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewHoteis.setAdapter(hoteisAdapter);
-
 
         if (periodo.equals(" - ")){
             textViewDadosBusca.setVisibility(View.GONE);

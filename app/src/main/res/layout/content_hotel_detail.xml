@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_hotel_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,62 +13,96 @@
     tools:context="br.com.lf.hotelurbano.HotelDetailActivity"
     tools:showIn="@layout/activity_hotel_detail">
 
-        <ImageView
-            android:scaleType="centerCrop"
-            android:src="@drawable/no_image"
-            android:id="@+id/img_hotel"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp" />
+        <RelativeLayout
+            android:id="@+id/content_hotel_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_below="@+id/img_hotel"
-            android:id="@+id/txtnomes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+                <TextView
+                    android:id="@+id/txtnomes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
 
-        <TextView
-            android:layout_below="@+id/txtnomes"
-            android:id="@+id/txtcidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:text="Data de Entrada"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:backgroundTint="@color/colorAccent"
-            android:id="@+id/btn_selecionar_datas"
-            android:layout_below="@+id/txtcidade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_below="@+id/txtnomes"
+                    android:id="@+id/txtcidade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <Button
-            android:text="Data de Saída"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:backgroundTint="@color/colorAccent"
-            android:id="@+id/btn_data_saida"
-            android:layout_below="@+id/btn_selecionar_datas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:layout_below="@+id/txtcidade"
+                    android:id="@+id/layout_data_entrada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-        <EditText
-            android:layout_toRightOf="@+id/btn_selecionar_datas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:layout_alignBottom="@+id/btn_selecionar_datas"
-            android:id="@+id/edit_data_entrada" />
+                        <ImageView
+                            android:id="@+id/img_calendar_entrada"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_calendar"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:layout_alignBottom="@+id/btn_data_saida"
-            android:layout_toRightOf="@+id/btn_data_saida"
-            android:id="@+id/edit_data_saida" />
+                        <TextView
+                            android:gravity="center_vertical"
+                            android:id="@+id/textViewEntrada"
+                            android:textStyle="bold"
+                            android:text="Entrada"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/img_calendar_entrada"
+                            android:layout_toEndOf="@+id/img_calendar_entrada"
+                            android:layout_alignParentTop="true" />
+
+                        <TextView
+                            android:layout_marginLeft="4dp"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:id="@+id/edit_data_entrada"
+                            android:layout_below="@+id/textViewEntrada"
+                            android:layout_toRightOf="@+id/img_calendar_entrada"
+                            android:layout_toEndOf="@+id/img_calendar_entrada" />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:layout_alignBaseline="@+id/layout_data_entrada"
+                    android:layout_below="@+id/txtcidade"
+                    android:layout_toRightOf="@+id/layout_data_entrada"
+                    android:id="@+id/layout_data_saida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/img_calendar_saida"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_calendar"/>
+
+                        <TextView
+                            android:layout_marginLeft="4dp"
+                            android:layout_below="@+id/textViewSaida"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:layout_toRightOf="@+id/img_calendar_saida"
+                            android:id="@+id/edit_data_saida" />
+
+                        <TextView
+                            android:id="@+id/textViewSaida"
+                            android:textStyle="bold"
+                            android:text="Saída"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toRightOf="@+id/img_calendar_saida"
+                            android:layout_toEndOf="@+id/img_calendar_saida" />
+
+                </RelativeLayout>
 
 
-</RelativeLayout>
+        </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

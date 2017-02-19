@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import br.com.lf.hotelurbano.R;
@@ -22,8 +24,10 @@ public class ListaHoteisAdapter extends RecyclerView.Adapter<ListaHoteisAdapter.
     private List<Hotel> mList;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack mRecyclerViewOnClickListenerHack;
+    Context context;
 
     public ListaHoteisAdapter(Context context, List<Hotel> list){
+        this.context = context;
         mList = list;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -38,7 +42,10 @@ public class ListaHoteisAdapter extends RecyclerView.Adapter<ListaHoteisAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.imageHotel.setImageResource(R.drawable.sem_foto_icone);
+        Glide.with(context)
+                .load("https://s3.amazonaws.com/ah.sized.images/desktop/luxury-hotels-rio-de-janeiro-belmond-copacabana-palace-slide-8_lg.jpg")
+                .into(holder.imageHotel);
+        //holder.imageHotel.setImageResource(R.drawable.sem_foto_icone);
         holder.nomeHotel.setText(mList.get(position).nome);
         holder.cidadeHotel.setText(mList.get(position).cidade);
     }

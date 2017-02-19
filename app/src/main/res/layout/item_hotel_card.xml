@@ -14,7 +14,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
         <ImageView
@@ -22,12 +22,13 @@
             android:layout_alignParentTop="true"
             android:id="@+id/img_hotel_lista"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="160dp" />
         <TextView
+            android:layout_below="@+id/img_hotel_lista"
             android:textSize="24sp"
             android:paddingLeft="16dp"
             android:paddingTop="10dp"
-            android:layout_below="@+id/img_hotel_lista"
+
             android:id="@+id/text_hotel_lista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
